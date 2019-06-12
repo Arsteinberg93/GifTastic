@@ -3,172 +3,34 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- <link rel="javascript" href="jsCode.js"> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <title>Movies!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
-
     <div class="container">
 
-        <h1>Animal Search</h1>
-
-
-
-        <div id="buttons-view"></div>
-
-
-
-        <form id="animal-form">
-            <label for="animal-input"> Add an Animal Button!</label>
-            <input type="text" id="animal-input"> <br>
-
-
-            <input id="add-animal" type="submit" value="Add a Animal, Yo!">
-            <div id="gifs"></div>
-        </form>
-
-
-
+        <h1>Movies</h1>
     </div>
+    <div id="movie-buttons">
+    </div>
+
 
     <div>
-        <script>
-            var animals = ["dog", "cat", "monkey", "shark", "horse"]
-            var results = '';
-            var animal = '';
-
-            renderButtons()
-
-
-
-
-
-
-            function alertAnimalName() {
-                var animalName = $(this).attr("data-name");
-                // console.log("animal name" + animalName)
-            }
-
-
-
-            function renderButtons() {
-
-
-
-                $("#buttons-view").empty();
-
-                for (var i = 0; i < animals.length; i++) {
-
-                    var a = $("<button>");
-
-                    a.addClass("animal")
-
-                    a.attr("data-name", animals[i])
-
-
-                    a.text(animals[i]);
-
-                    $("#buttons-view").append(a)
-                        // console.log($(this).val());
-
-
-                }
-
-                console.log(animals)
-            }
-
-            $(".animal").on("click", function() {
-
-                animal = $(this).val()
-                console.log("hi")
-
-                apiCall();
-
-            })
-
-
-            // This function handles events where one button is clicked
-            $("#add-animal").on("click", function(event) {
-
-                // Preventing the buttons default behavior when clicked (which is submitting a form)
-                event.preventDefault();
-                // This line grabs the input from the textbox
-                animal = $("#animal-input").val().trim();
-                console.log(animal)
-
-                // Adding the movie from the textbox to our array
-                animals.push(animal);
-                console.log(animals)
-                renderButtons()
-                    // Calling renderButtons which handles the processing of our movie array
-                apiCall();
-
-            })
-
-            function apiCall() {
-
-                var queryURL = "https://cors-anywhere.herokuapp.com/api.giphy.com/v1/gifs/search?q=" + animal + "&api_key=VL6ppZsKrhD6othbQ6K3h9caOo02D1yA"
-
-
-                $.ajax({
-                    url: queryURL,
-                    method: "GET"
-                })
-
-
-                .then(function(response) {
-                    // Storing an array of results in the results variable
-                    results = response.data;
-                    console.log(results)
-
-                    // Looping over every result item
-                    for (var i = 0; i < results.length; i++) {
-
-                        // Only taking action if the photo has an appropriate rating
-
-                        // Creating a div for the gif
-                        var gifDiv = $("<div>");
-
-                        // Storing the result item's rating
-                        var rating = results[i];
-
-
-                        // Creating a paragraph tag with the result item's rating
-                        var p = $("<p>").text("Rating: " + rating);
-
-                        // Creatng an image tag
-                        var animalImage = $("<img>");
-
-                        // Giving the image tag an src attribute of a proprty pulled off the
-                        // result item
-                        animalImage.attr("src", results[i].images.fixed_height.url);
-
-                        // Appending the paragraph and personImage we created to the "gifDiv" div we created
-                        gifDiv.append(p);
-                        gifDiv.append(animalImage);
-
-                        // Prepending the gifDiv to the "#gifs-appear-here" div in the HTML
-                        $("#gifs").prepend(gifDiv);
-
-                    }
-
-
-
-
-
-                });
-            }
-
-
-            $(document).on("click", ".animal", alertAnimalName);
-        </script>
+        <form id="form">
+            <label for="movie-input">Add a movie</label><br>
+            <input type="text" id="movie-input">
+            <input id="add-movie" type="submit" value="Submit">
+        </form>
     </div>
 
+    <div id="movies">
+    </div>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.js">
+    </script>
+    <script type="text/javascript" src="javascript.js">
+    </script>
 </body>
 
 </html>
