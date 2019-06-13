@@ -12,9 +12,6 @@
 
         <h1>Movies</h1>
     </div>
-    <div id="movie-buttons">
-    </div>
-
 
     <div>
         <form id="form">
@@ -23,7 +20,10 @@
             <input id="add-movie" type="submit" value="Submit">
         </form>
 
-        <div id="movie-button">
+        <div id="movie-buttons">
+            <button class="movie-button"></button>
+            <button class="movie-button"></button>
+            <button class="movie-button"></button>
         </div>
 
         <div id="movies-image"></div>
@@ -33,45 +33,85 @@
             $(document).ready(function() {
                         var movies = ["Old School", "Miracle", "The Hangover"];
 
-                        function renderButtons() {
-                            $("#movie-buttons").empty();
+                        function renderButtons(arrayToUse, classToAddTo, areaToAddTo) {
+                            $(areaToAddTo).empty();
 
                             for (let i = 0; i < movies.length; i++);
                             var a = $("<button>");
-                            a.addClass("movie");
-                            a.attr("data-name", movies[i]);
-                            a.text(movies[i]);
-                            $("#movie-buttons").append(a);
+                            a.addClass(classToAddTo);
+                            a.attr("data-name", arrayToUse[i]);
+                            a.text(arrayToUse[i]);
+                            $(areaToAddTo).append(a);
 
-                        };
-                    }
+                        }
 
-                    $(document.on("click", "movie-button", function() {
-                            $("#movies-images").empty();
-                            $("movie-button").removeClass("active");
-                            $(this).addClass("active");
-                            var name = $(this).attr("data-name");
-                            var queryURL = "https://cors-anywhere.herokuapp.com/api.giphy.com/v1/gifs/search?q=" + name + "&api_key=VL6ppZsKrhD6othbQ6K3h9caOo02D1yA";
 
-                            $.ajax({
-                                url: queryURL,
-                                method: "GET"
-                            })
+                        $(document.on("click", ".movie-button", function() {
+                                $("#movies-image").empty();
+                                $(".movie-button").removeClass("active");
+                                $(this).addClass("active");
+                                var name = $(this).attr("data-name");
+                                var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + name + "&api_key=BkaUZZWcFij6J7AoQj3WtPb1R2p9O6V9&limit-10";
 
-                            .then(function(response) {
+                                $.ajax({
+                                    url: queryURL,
+                                    method: "GET"
+                                })
 
-                                var results = response.data;
-                                for (let i = 0; i < results.length; i++) {
-                                    var movieDiv = $("<div class=\"movie-item\">")
-                                    var rating = results[i].rating;
-                                    var p = $("<p>").text("Rating: " + rating);
-                                    var animated = results[i].images.fixed_height.url;
-                                    var still = results[i].images.fixed_height.url;
+                                .then(function(response) {
+
+                                    var results = response.data;
+                                    for (let i = 0; i < results.length; i++) {
+                                        var movieDiv = $("<div class=\"movie-item\">")
+                                        var rating = results[i].rating;
+                                        var p = $("<p>").text("Rating: " + rating);
+                                        var animated = results[i].images.fixed_height.url;
+                                        var still = results[i].images.fixed_height_still.url;
+
+                                        var movieImage = $("<img>");
+                                        movieImage.attr("src", still);
+                                        movieImage.attr("data-still", still);
+                                        movieImage.attr("data-animate", animated);
+                                        movieImage.attr("data-state", "still");
+                                        movieImage.addClass("movies-image");
+
+                                        movieDiv.append(p);
+                                        movieDiv.append(movieImage);
+
+                                        $("#movies-image").append(movieDiv);
+                                    }
+
+                                });
+
+                            });
+
+                            $(document).on("click", ".movie-image", function() {
+
+                                var state = $(this).attr("data-state");
+
+                                if (state === "still") {
+                                    $(this).attr("src", $(this).attr("data-animate"));
+                                    $(this).attr("data-state", "animate");
+                                } else {
+                                    $(this).attr("src", $(this).attr("data-still"));
+                                    $(this).attr("data-state", "still");
                                 }
 
-                            })
+                            });
 
+                            $("#add-movie").on("click", function(event) {
+                                event.preventDefault();
+                                var newMovie = $("input").eq(0).val()
 
+                                if (newMovie.length > 2) {
+                                    movies.push(newMovie);
+                                }
+
+                                renderButtons(movies, "movie-button", "#movie-button");
+
+                            });
+
+                            renderButtons(movies, "movie-button", "#movie-button");
 
                         });
         </script>
