@@ -30,6 +30,50 @@
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type="text/javascript">
+            $(document).ready(function() {
+                        var movies = ["Old School", "Miracle", "The Hangover"];
+
+                        function renderButtons() {
+                            $("#movie-buttons").empty();
+
+                            for (let i = 0; i < movies.length; i++);
+                            var a = $("<button>");
+                            a.addClass("movie");
+                            a.attr("data-name", movies[i]);
+                            a.text(movies[i]);
+                            $("#movie-buttons").append(a);
+
+                        };
+                    }
+
+                    $(document.on("click", "movie-button", function() {
+                            $("#movies-images").empty();
+                            $("movie-button").removeClass("active");
+                            $(this).addClass("active");
+                            var name = $(this).attr("data-name");
+                            var queryURL = "https://cors-anywhere.herokuapp.com/api.giphy.com/v1/gifs/search?q=" + name + "&api_key=VL6ppZsKrhD6othbQ6K3h9caOo02D1yA";
+
+                            $.ajax({
+                                url: queryURL,
+                                method: "GET"
+                            })
+
+                            .then(function(response) {
+
+                                var results = response.data;
+                                for (let i = 0; i < results.length; i++) {
+                                    var movieDiv = $("<div class=\"movie-item\">")
+                                    var rating = results[i].rating;
+                                    var p = $("<p>").text("Rating: " + rating);
+                                    var animated = results[i].images.fixed_height.url;
+                                    var still = results[i].images.fixed_height.url;
+                                }
+
+                            })
+
+
+
+                        });
         </script>
 </body>
 
